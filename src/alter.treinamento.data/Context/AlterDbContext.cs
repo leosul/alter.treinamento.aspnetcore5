@@ -1,11 +1,13 @@
-﻿using alter.treinamento.business.Models;
+﻿using alter.treinamento.business.Interfaces;
+using alter.treinamento.business.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace alter.treinamento.data.Context
 {
-    public class AlterDbContext : DbContext
+    public class AlterDbContext : DbContext, IUnitOfWork
     {
         public AlterDbContext(DbContextOptions<AlterDbContext> options) : base(options)
         {
@@ -15,6 +17,14 @@ namespace alter.treinamento.data.Context
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+
+        public async Task<bool> Commit()
+        {
+            return await base.SaveChangesAsync() > 0;
+        }
+
+        public bool Rollback() => false;
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

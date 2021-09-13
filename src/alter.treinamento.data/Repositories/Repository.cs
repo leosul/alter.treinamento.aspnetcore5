@@ -4,6 +4,7 @@ using alter.treinamento.data.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -20,42 +21,42 @@ namespace alter.treinamento.data.Repositories
             DbSet = db.Set<TEntity>();
         }
 
-        public Task Add(TEntity entity)
+        public IUnitOfWork UnitOfWork => Db;
+        public async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return await DbSet.AsNoTracking().Where(predicate).ToListAsync();
         }
 
-        public void Dispose()
+        public async Task<List<TEntity>> GetAll()
         {
-            throw new NotImplementedException();
+            return await DbSet.AsNoTracking().ToListAsync();
         }
 
-        public Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate)
+        public async Task<TEntity> GetbyId(Guid id)
         {
-            throw new NotImplementedException();
+            return await DbSet.FindAsync(id);
         }
 
-        public Task<List<TEntity>> GetAll()
+        public void Add(TEntity entity)
         {
-            throw new NotImplementedException();
+            DbSet.Add(entity);
         }
 
-        public Task<TEntity> GetbyId(Guid id)
+        public void Update(TEntity entity)
         {
-            throw new NotImplementedException();
+            DbSet.Update(entity);
         }
 
-        public Task Remove(Guid id)
+        public void Remove(Guid id)
         {
-            throw new NotImplementedException();
+            DbSet.Remove(new TEntity { Id = id });
         }
 
         public Task<int> SaveChanges()
         {
             throw new NotImplementedException();
         }
-
-        public Task Update(TEntity entity)
+        public void Dispose()
         {
             throw new NotImplementedException();
         }

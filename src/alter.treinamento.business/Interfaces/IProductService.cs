@@ -6,9 +6,9 @@ namespace alter.treinamento.business.Interfaces
 {
     public interface IProductService
     {
-        Task Add(Product product);
-        Task Update(Product product);
-        Task Remove(Guid id);
+        Task<bool> Add(Product product);
+        Task<bool> Update(Product product);
+        Task<bool> Remove(Guid id);
         void SetIsActive(bool isActive);
     }
 }

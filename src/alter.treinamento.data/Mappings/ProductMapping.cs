@@ -12,7 +12,7 @@ namespace alter.treinamento.data.Mappings
 
             builder.Property(s => s.Description)
                 .IsRequired()
-                .HasColumnName("Desc")
+                .HasColumnName("Description")
                 .HasColumnType("varchar(300)");
 
             builder.Property(s => s.Code)

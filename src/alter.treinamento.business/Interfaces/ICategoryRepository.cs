@@ -4,6 +4,6 @@ namespace alter.treinamento.business.Interfaces
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-
+        
     }
 }
