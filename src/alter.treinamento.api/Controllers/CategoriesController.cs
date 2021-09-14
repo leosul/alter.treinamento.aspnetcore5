@@ -11,15 +11,16 @@ namespace alter.treinamento.api.Controllers
 {
     [ApiController]
     [Route("api/v1/categories")]
-    public class CategoriesController : ControllerBase
+    public class CategoriesController : MainController
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
 
-        public CategoriesController(ICategoryRepository categoryRepository,
+        public CategoriesController(INotificator notificator,
+                                    ICategoryRepository categoryRepository,
                                     ICategoryService categoryService,
-                                    IMapper mapper)
+                                    IMapper mapper) : base(notificator)
         {
             _categoryRepository = categoryRepository;
             _categoryService = categoryService;
@@ -29,7 +30,7 @@ namespace alter.treinamento.api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoryViewModel>>> GetAll()
         {
-            return Ok(_mapper.Map<IEnumerable<CategoryViewModel>>(await _categoryRepository.GetAll()));
+            return CustomResponse(_mapper.Map<IEnumerable<CategoryViewModel>>(await _categoryRepository.GetAll()));
         }
 
         [HttpGet("{id:guid}")]
@@ -37,35 +38,39 @@ namespace alter.treinamento.api.Controllers
         {
             var category = await _categoryRepository.GetbyId(id);
 
-            if (category == null) return NotFound();
+            if (category == null) return CustomResponse(NotFound());
 
-            return Ok(_mapper.Map<CategoryViewModel>(category));
+            return CustomResponse(_mapper.Map<CategoryViewModel>(category));
         }
 
         [HttpPost]
-        public async Task<ActionResult<CategoryViewModel>> add(CategoryViewModel categoryViewModel)
+        public async Task<ActionResult<CategoryViewModel>> Add(CategoryViewModel categoryViewModel)
         {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
             await _categoryService.Add(_mapper.Map<Category>(categoryViewModel));
 
-            return Ok(categoryViewModel);
+            return CustomResponse(categoryViewModel);
         }
 
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<CategoryViewModel>> Update(Guid id, CategoryViewModel categoryViewModel)
         {
-            if (GetCategoryById(id) == null)
-                return NotFound();
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            return Ok(await _categoryService.Update(_mapper.Map<Category>(categoryViewModel)));
+            if (await GetCategoryById(id) == null)
+                return CustomResponse(NotFound());
+
+            return CustomResponse(await _categoryService.Update(_mapper.Map<Category>(categoryViewModel)));
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<Category>> Remove(Guid id)
         {
-            if (GetCategoryById(id) == null)
-                return NotFound();
+            if (await GetCategoryById(id) == null)
+                return CustomResponse(NotFound());
 
-            return Ok(await _categoryService.Remove(id));
+            return CustomResponse(await _categoryService.Remove(id));
         }
 
         private async Task<CategoryViewModel> GetCategoryById(Guid id)

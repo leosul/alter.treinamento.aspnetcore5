@@ -5,7 +5,7 @@ namespace alter.treinamento.api.ViewModel
 {
     public class ProductViewModel
     {
-        public Guid Id { get; set; }
+        public Guid id { get; set; }
 
         [Required(ErrorMessage = "The {0} field is mandatory")]
         [StringLength(200, ErrorMessage = "Field {0} must have between {2} and {1} characters", MinimumLength = 2)]

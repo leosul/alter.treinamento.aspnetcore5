@@ -51,14 +51,6 @@ namespace alter.treinamento.data.Repositories
         {
             DbSet.Remove(new TEntity { Id = id });
         }
-
-        public Task<int> SaveChanges()
-        {
-            throw new NotImplementedException();
-        }
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+        public void Dispose() => Db?.Dispose();
     }
 }

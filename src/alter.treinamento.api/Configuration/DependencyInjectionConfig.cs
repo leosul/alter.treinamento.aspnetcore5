@@ -6,6 +6,8 @@ using alter.treinamento.business.Services;
 using alter.treinamento.data.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace alter.treinamento.api.Configuration
 {
@@ -29,6 +31,9 @@ namespace alter.treinamento.api.Configuration
             services.AddScoped<INotificator, Notificator>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            //Swagger
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
             return services;
         }

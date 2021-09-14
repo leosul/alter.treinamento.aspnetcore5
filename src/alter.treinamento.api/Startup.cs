@@ -2,11 +2,11 @@ using alter.treinamento.api.Configuration;
 using alter.treinamento.data.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 
 namespace alter.treinamento.api
 {
@@ -29,8 +29,6 @@ namespace alter.treinamento.api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApiConfig();
-
             services.AddDbContext<AlterDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
@@ -38,23 +36,17 @@ namespace alter.treinamento.api
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "alter.treinamento.api", Version = "v1" });
-            });
+            services.AddApiConfig();
+
+            services.AddSwaggerConfig();
 
             services.ResolveDependencies();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             app.UseApiConfig(env);
-
-            if (env.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "alter.treinamento.api v1"));
-            }
+            app.UseSwaggerConfig(provider);
         }
     }
 }

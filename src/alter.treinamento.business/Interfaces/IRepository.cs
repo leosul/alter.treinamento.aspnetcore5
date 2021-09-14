@@ -15,6 +15,5 @@ namespace alter.treinamento.business.Interfaces
         void Update(TEntity entity);
         void Remove(Guid id);
         Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate);
-        Task<int> SaveChanges();
     }
 }
