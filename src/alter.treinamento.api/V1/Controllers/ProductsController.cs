@@ -1,4 +1,5 @@
-﻿using alter.treinamento.api.ViewModel;
+﻿using alter.treinamento.api.Controllers;
+using alter.treinamento.api.ViewModel;
 using alter.treinamento.business.Interfaces;
 using alter.treinamento.business.Models;
 using AutoMapper;
@@ -8,10 +9,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace alter.treinamento.api.Controllers
+namespace alter.treinamento.api.V1.Controllers
 {
     [ApiController]
-    [Route("api/v1/products")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/products")]
     public class ProductsController : MainController
     {
         private readonly IProductRepository _productRepository;
@@ -19,9 +21,10 @@ namespace alter.treinamento.api.Controllers
         private readonly IMapper _mapper;
 
         public ProductsController(INotificator notificator,
+                                  IUser user,
                                   IProductRepository productRepository,
                                   IProductService productService,
-                                  IMapper mapper) : base(notificator)
+                                  IMapper mapper) : base(notificator, user)
         {
             _productRepository = productRepository;
             _productService = productService;

@@ -1,4 +1,5 @@
-﻿using alter.treinamento.business.Interfaces;
+﻿using alter.treinamento.api.Extensions;
+using alter.treinamento.business.Interfaces;
 using alter.treinamento.business.Interfaces.LifeTime;
 using alter.treinamento.business.Models.LifeTime;
 using alter.treinamento.business.Notifications;
@@ -34,6 +35,9 @@ namespace alter.treinamento.api.Configuration
 
             //Swagger
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+
+            //Identity
+            services.AddScoped<IUser, User>();
 
             return services;
         }

@@ -1,11 +1,12 @@
 ﻿using alter.treinamento.business.Interfaces.LifeTime;
 using Microsoft.AspNetCore.Mvc;
 
-namespace alter.treinamento.api.Controllers
+namespace alter.treinamento.api.V2.Controllers
 {
 
     [ApiController]
-    [Route("api/v1/life-time")]
+    [ApiVersion("2.0")]
+    [Route("api/v{version:apiVersion}/life-time")]
     public class LifeTimeController : ControllerBase
     {
         private readonly ITransientService _transientService1;

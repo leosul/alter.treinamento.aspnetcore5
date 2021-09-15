@@ -2,6 +2,7 @@
 using alter.treinamento.business.Notifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Linq;
 
 namespace alter.treinamento.api.Controllers
@@ -10,10 +11,20 @@ namespace alter.treinamento.api.Controllers
     public class MainController : ControllerBase
     {
         private readonly INotificator _notificator;
+        public readonly IUser _appUser;
 
-        public MainController(INotificator notificator)
+        protected Guid UserId { get; set; }
+        protected bool AuthenticatedUser { get; set; }
+        public MainController(INotificator notificator, IUser appUser)
         {
             _notificator = notificator;
+            _appUser = appUser;
+
+            if(appUser.IsAuthenticated())
+            {
+                UserId = appUser.GetUserId();
+                AuthenticatedUser = true;
+            }
         }
 
         protected bool ValidOperation()
